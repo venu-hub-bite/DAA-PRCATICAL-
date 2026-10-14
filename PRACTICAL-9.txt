@@ -1,0 +1,44 @@
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n, cost[10][10], visited[10] = {};
+    cout << "Enter number of vertices: ";
+    cin >> n;
+
+    cout << "Enter cost matrix (0 for no edge):\n";
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            cin >> cost[i][j];
+
+    visited[0] = 1;
+    int edges = 0, total = 0;
+
+    while (edges < n - 1) {
+        int minCost = 9999, u = -1, v = -1;
+
+        for (int i = 0; i < n; i++)
+            if (visited[i])
+                for (int j = 0; j < n; j++)
+                    if (!visited[j] && cost[i][j] > 0 &&
+                        cost[i][j] < minCost) {
+                        minCost = cost[i][j];
+                        u = i;
+                        v = j;
+                    }
+
+        if (v == -1) {
+            cout << "Graph is disconnected";
+            return 0;
+        }
+
+        cout << u << " - " << v << " : " << minCost << endl;
+        visited[v] = 1;
+        total += minCost;
+        edges++;
+    }
+
+    cout << "Minimum cost = " << total;
+    return 0;
+}
