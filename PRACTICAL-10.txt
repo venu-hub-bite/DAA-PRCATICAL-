@@ -1,0 +1,49 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+struct Edge {
+    int u, v, w;
+};
+
+int parent[100];
+
+int find(int x) {
+    if (parent[x] == x) return x;
+    return parent[x] = find(parent[x]);
+}
+
+int main() {
+    int n, e, cost = 0;
+    Edge a[100];
+
+    cout << "Enter vertices and edges: ";
+    cin >> n >> e;
+
+    cout << "Enter edges (u v weight):\n";
+    for (int i = 0; i < e; i++)
+        cin >> a[i].u >> a[i].v >> a[i].w;
+
+    sort(a, a + e, [](Edge x, Edge y) {
+        return x.w < y.w;
+    });
+
+    for (int i = 0; i < n; i++)
+        parent[i] = i;
+
+    cout << "MST edges:\n";
+    for (int i = 0; i < e; i++) {
+        int u = find(a[i].u);
+        int v = find(a[i].v);
+
+        if (u != v) {
+            parent[u] = v;
+            cout << a[i].u << " - " << a[i].v
+                 << " : " << a[i].w << endl;
+            cost += a[i].w;
+        }
+    }
+
+    cout << "Minimum cost = " << cost;
+    return 0;
+}
